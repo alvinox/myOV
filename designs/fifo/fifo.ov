@@ -1,0 +1,101 @@
+/*
+   This is a circle-fifo
+   In one cycle, it can only read or write.
+   That means it can't read and write simutaniously.
+*/
+
+design fifo<T> {
+    
+    // meta type declaration
+    T    data
+    
+    // parameter declaration
+    const ENTRIES      = 16
+    const MAX_READ     =  3
+    const MAX_WRITE    =  3
+    const ADDR_WIDTH   = ceil(log2(entries))
+    
+    reg bool           _overflow;
+    reg bool           _underflow;
+    reg int:ADDR_WIDTH _rd_ptr;
+    reg    :ADDR_WIDTH _wr_ptr;
+    reg    :ADDR_WIDTH _depth;
+
+    mem T _array[ENTRIES];
+
+    func read (int read_cnt) -> T[MAX_READ] {
+        if read_cnt > MAX_READ {
+            panic("read_cnt should less equal than %d", MAX_READ)
+        }
+
+        wire T read_data[MAX_POP] = nil
+
+        wire addr
+        for i in range(read_cnt) {
+            addr = _rd_ptr + i >= _depth ? \
+                   _rd_ptr + i  - _depth : \
+                   _rd_ptr + i
+
+            read_data[i] = _array[addr]
+        }
+
+        return read_data;
+    }
+
+    func write (T input_data[]) {
+        write_cnt := len(input_data)
+        if write_cnt > MAX_WRITE {
+            panic("write_cnt should less equal than %d", MAX_WRITE)
+        }
+
+        wire addr
+        for i in range(write_cnt) {
+            addr = _wr_ptr + i >= _depth ? \
+                   _wr_ptr + i  - _depth : \
+                   _wr_ptr + i
+
+            _array[addr] = input_data[i]
+        }
+    }
+
+    proc reset() {
+        _overflow  = false
+        _underflow = false
+        _rd_ptr    = 0
+        _wr_ptr    = 0
+        // _depth  = 0
+        for i in range(ENTRIES) {
+            _array[i] = T{i}
+        }
+    }
+
+    proc main() {
+    }
+
+    proc pre_update() {
+
+        if !_underflow {
+            if _rd_ptr < _wr_ptr {
+                if _rd_ptr + read.read_cnt >= _wr_ptr {
+                    _underflow = true;
+                }
+            } elif _rd_ptr + read.read_cnt >= _depth {
+                if _rd_ptr + read.read_cnt  - _depth >= _wr_ptr {
+                    _underflow = true;
+                }
+            }
+        }
+
+        if !_overflow {
+            if _wr_ptr < _rd_ptr {
+                if _wr_ptr + wirte.write_cnt >= _rd_ptr {
+                    _overflow = true;
+                }
+            } elif _wr_ptr + wirte.write_cnt >= _depth {
+                if _wr_ptr + wirte.write_cnt  - _depth >= _rd_ptr {
+                    _overflow = true;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,6 @@
+design wire {
+    func assign(int in) -> wire {
+        out := in
+        return out
+    }
+}

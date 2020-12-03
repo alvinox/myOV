@@ -1,0 +1,6 @@
+
+design step_one {
+    func get() -> wire {
+        return 1
+    }
+}
