@@ -1,8 +1,6 @@
-/*
-   This is a circle-fifo
-   In one cycle, it can only read or write.
-   That means it can't read and write simutaniously.
-*/
+// This is a circle-fifo
+// In one cycle, it can only read or write.
+// That means it can't read and write simutaniously.
 
 design fifo<T> {
     
