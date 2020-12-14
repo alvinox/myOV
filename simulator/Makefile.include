@@ -1,0 +1,46 @@
+RELEASE := 1
+DEBUG   := 0
+
+export RELEASE
+export DEBUG
+
+CC = clang
+
+LDFLAGS = -lm -pthread
+# LDFLAGS += -L/tool/anaconda3/envs/py38/lib -lpython3.8
+
+OPTIONS = -Wall -Wno-unused-result -Wno-unknown-pragmas -Wfatal-errors -pthread -fwrapv -Ofast -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -fPIC
+
+# CFLAGS += -I/tool/anaconda3/envs/py38/include/python3.8
+# CFLAGS += -I/tool/anaconda3/envs/py38/lib/python3.8/site-packages/numpy/core/include
+
+OBJDIR = obj
+LIBDIR = lib
+
+OBJS = $(addprefix $(OBJDIR)/, $(patsubstr %.c, %.o, $(CFILES)))
+OBJ_TYPE = -O
+
+
+# RELEASE has higher priority then DEBUG
+ifneq ($(findstring 1, $(DEBUG) $(debug)),)
+    RELEASE = 0
+    DEBUG = 1
+endif
+
+ifneq ($(findstring 1, $(RELEASE) $(release)),)
+    RELEASE = 1
+    DEBUG = 0
+endif
+
+MICRO := 
+ifeq ($(DEBUG), 1)
+    MICRO += -O0 -g -DDEBUG
+    OBJ_TYPE = -G
+endif
+
+CFLAGS += $(MICRO)
+
+# C utilities
+MODULE    = simulator
+BUILD_DIR = build
+INFRA_DIR = infra

@@ -1,0 +1,12 @@
+INFRA_HFILES = test.h \
+               std_headers.h \
+               basic_define.h \
+               sim_utils.h \
+
+INFRA_CFILES = test.c \
+               basic_define.c \
+               sim_utils.c \
+
+INFRA_CPLUSPLUSFILES =  \
+                       
+
