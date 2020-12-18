@@ -17,20 +17,20 @@ Design* Module::GetDesign(const std::string& id) const {
   return d;
 }
 
-void Module::Print(std::ostream& os) const {
-  os << "Module " << GetID() << std::endl;
-  for (const std::string& d : _records._designs) {
-    Design* design = GetDesign(d);
-    design->Print(os);
-  }
-}
+// void Module::Print(std::ostream& os) const {
+//   os << "Module " << GetID() << std::endl;
+  // for (const std::string& d : _records._designs) {
+  //   Design* design = GetDesign(d);
+  //   design->Print(os);
+  // }
+// }
 
-void Module::_record(Value* v) {
-  if (v->GetType()->IsDesignTy()) {
-    _records._designs.push_back(v->GetID());
-  } else {
-    assert(0 && "invalid value type");
-  }
-}
+// void Module::_record(Value* v) {
+  // if (v->GetType()->IsDesignTy()) {
+  //   _records._designs.push_back(v->GetID());
+  // } else {
+  //   assert(0 && "invalid value type");
+  // }
+// }
 
 } // end namespace ir

@@ -16,12 +16,11 @@ class Design;
 
 class Module final : public Scope {
  public:
-  struct Records {
-    std::vector<std::string> _designs; ///< record the designs
-  };
+  // struct Records {
+  //   std::vector<std::string> _designs; ///< record the designs
+  // };
 
  public:
-  // constructor/destructor
   explicit Module(const std::string& id, Context &c);
 
  public:
@@ -35,15 +34,15 @@ class Module final : public Scope {
   Design* GetDesign(const std::string& id) const;
 
   /// Print the module to an output stream.
-  virtual void Print(std::ostream& os) const override;
+  // virtual void Print(std::ostream& os) const override;
 
- private:
-  virtual void _record(Value* v) override;
+//  private:
+  // virtual void _record(Value* v) override;
 
  private:
   Context& _context;      ///< The Context from which types and
                           ///< constants are allocated.
-  Records _records;
+  // Records _records;
 }; // end class Module
 
 

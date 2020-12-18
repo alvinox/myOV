@@ -15,10 +15,10 @@ class Design;
 class Procedure final : public Scope {
 
  public:
-  struct Records {
-    std::vector<std::string> _registers;  ///< record the registers
-    std::vector<std::string> _wires;      ///< record the wires
-  };
+  // struct Records {
+  //   std::vector<std::string> _registers;  ///< record the registers
+  //   std::vector<std::string> _wires;      ///< record the wires
+  // };
 
  public:
   // static methods
@@ -35,12 +35,12 @@ class Procedure final : public Scope {
   /// Print the design to an output stream.
   virtual void Print(std::ostream& os) const override;
 
- private:
-  virtual void _record(Value* v) override;
+//  private:
+//   virtual void _record(Value* v) override;
 
  private:
   // Design* _parent_design; ///< parent design for the procedure
-  Records _records;
+  // Records _records;
 };
 
 } // end namespace ir

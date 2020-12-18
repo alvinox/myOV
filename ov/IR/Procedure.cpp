@@ -29,18 +29,18 @@ void Procedure::Print(std::ostream& os) const {
   // }
 }
 
-void Procedure::_record(Value* v) {
-  switch (v->GetType()->GetTypeID())
-  {
-  case Type::RegisterTyID:
-    _records._registers.push_back(v->GetID()); break;
-  case Type::WireTyID:
-    _records._wires.push_back(v->GetID()); break;
-  default:
-    assert(0 && "invalid value type");
-    break;
-  }
+// void Procedure::_record(Value* v) {
+//   switch (v->GetType()->GetTypeID())
+//   {
+//   case Type::RegisterTyID:
+//     _records._registers.push_back(v->GetID()); break;
+//   case Type::WireTyID:
+//     _records._wires.push_back(v->GetID()); break;
+//   default:
+//     assert(0 && "invalid value type");
+//     break;
+//   }
 
-}
+// }
 
 } // end namespace ir

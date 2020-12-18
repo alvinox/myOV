@@ -40,7 +40,7 @@ class Register final : public Logic {
  
  public:
   /// Print the register to an output stream.
-  virtual void Print(std::ostream& os) const override;
+  // virtual void Print(std::ostream& os) const override;
 
  private:
 };
@@ -55,7 +55,7 @@ class Wire final : public Logic {
 
  public:
   /// Print the register to an output stream.
-  virtual void Print(std::ostream& os) const override;
+  // virtual void Print(std::ostream& os) const override;
 
  private:
 };

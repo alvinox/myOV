@@ -28,7 +28,7 @@ class Type {
     TyIDCount,
   };
 
- explicit Type(Context& c, TypeID tid)
+  explicit Type(Context& c, TypeID tid)
    : _context(c), _tid(tid) { }
 
  public:

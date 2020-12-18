@@ -6,8 +6,12 @@
 #include "Context.h"
 #include "Module.h"
 #include "Logic.h"
+#include "IRBuilder.h"
 
 namespace ir {
+
+Context   context;
+IRBuilder builder;
 
 Procedure* create_procedure_reset(Scope* node) {
   assert(node->GetType()->IsDesignTy());
@@ -31,18 +35,25 @@ Design* create_design(Scope* node) {
   Module* module = dynamic_cast<Module*>(node);
 
   Design* design = Design::Create("test_ip", module);
+  builder.CreateDesign(design);
+  builder.SetInsertPoint(design);
 
   Register* r0   = Register::Create("r0", design, 7, 0);
+  // builder.CreateRegister(r0);
   Register* r1   = Register::Create("r1", design);
+  // builder.CreateRegister(r1);
   Wire*     w0   = Wire::Create("w0", design, 13, 0);
+  // builder.CreateWire(w0);
   Wire*     w1   = Wire::Create("w1", design, 4);
+  // builder.CreateWire(w1);
 
   return design;
 }
 
 Module* create_module() {
-  Context context;
   Module* module = new Module("test_ip.sv", context);
+  builder.SetInsertPoint(module);
+
 
   Design* design = create_design(module);
 

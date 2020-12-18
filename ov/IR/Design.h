@@ -22,11 +22,11 @@ class Wire;
 
 class Design final : public Scope {
  public:
-  struct Records {
-    std::vector<std::string> _registers;  ///< record the registers
-    std::vector<std::string> _wires;      ///< record the wires
-    std::vector<std::string> _procedures; ///< record the procedures
-  };
+  // struct Records {
+  //   std::vector<std::string> _registers;  ///< record the registers
+  //   std::vector<std::string> _wires;      ///< record the wires
+  //   std::vector<std::string> _procedures; ///< record the procedures
+  // };
 
  public:
   // static methods
@@ -71,14 +71,14 @@ class Design final : public Scope {
   // Process* getMemory(const std::string& id);
 
   /// Print the design to an output stream.
-  virtual void Print(std::ostream& os) const override;
+  // virtual void Print(std::ostream& os) const override;
 
- private:
-  virtual void _record(Value* v) override;
+//  private:
+//   virtual void _record(Value* v) override;
 
  private:
   // Module* _parent_module; ///< parent module for the design
-  Records _records;
+  // Records _records;
 
   // std::string _design_id; ///< Human readable identifier for the design
   // Context& _context;      ///< The Context from which types and
