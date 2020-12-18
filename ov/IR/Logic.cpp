@@ -1,20 +1,36 @@
 #include "Logic.h"
 
 namespace ir {
-  Register::Register(const std::string& id, Design* d, unsigned hi, unsigned lo) 
-    : Logic(id, d, hi, lo) {
+//---------------------  Register  ------------------------//
 
-    const Type* t = d->context().getType(static_cast<unsigned>(Type::RegisterTyID));
-    this->setType(t);
+Register::Register(const std::string& id, Scope* s, unsigned hi, unsigned lo) 
+  : Logic(id, s, hi, lo) {
 
-  }
+  const Type* t = s->GetContext().GetType(static_cast<unsigned>(Type::RegisterTyID));
+  this->SetType(t);
 
-  Wire::Wire(const std::string& id, Design* d, unsigned hi, unsigned lo) 
-    : Logic(id, d, hi, lo) {
+  s->Define(this);
 
-    const Type* t = d->context().getType(static_cast<unsigned>(Type::WireTyID));
-    this->setType(t);
+}
 
-  }
+void Register::Print(std::ostream& os) const {
+  os << "Register " << GetID() << std::endl;
+}
+
+//---------------------  Wire  ------------------------//
+
+Wire::Wire(const std::string& id, Scope* s, unsigned hi, unsigned lo) 
+  : Logic(id, s, hi, lo) {
+
+  const Type* t = s->GetContext().GetType(static_cast<unsigned>(Type::WireTyID));
+  this->SetType(t);
+
+  s->Define(this);
+
+}
+
+void Wire::Print(std::ostream& os) const {
+  os << "Wire " << GetID() << std::endl;
+}
 
 } // end namespace ir

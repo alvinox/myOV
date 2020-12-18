@@ -18,7 +18,7 @@ class Context {
   ~Context();
  
  public:
-  const Type* getType(unsigned tid) { 
+  const Type* GetType(unsigned tid) { 
       Type* t = _type_map[tid];
       return t;
     // try {

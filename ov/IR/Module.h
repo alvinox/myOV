@@ -6,6 +6,7 @@
 #include <stack> 
 
 #include "Context.h"
+#include "Scope.h"
 #include "Design.h"
 #include "SymbolTable.h"
 
@@ -13,37 +14,36 @@ namespace ir {
 
 class Design;
 
-class Module {
+class Module final : public Scope {
+ public:
+  struct Records {
+    std::vector<std::string> _designs; ///< record the designs
+  };
+
  public:
   // constructor/destructor
-  explicit Module(const std::string& id, Context &c)
-    : _module_id(id), _context(c) { }
-
-  ~Module() {
-    _symtab.clear();
-  }
+  explicit Module(const std::string& id, Context &c);
 
  public:
 
   /// Get the global data context.
   /// @returns Context - a container for global information
-  Context &getContext() const { return _context; }
-
-  /// Define the specified design in the module symbol table.
-  Symbol& Define(Design* design);
+  virtual Context& GetContext() const override { return _context; }
 
   /// Look up the specified design in the module symbol table. If it does not
   /// exist, return null.
-  Design* getDesign(const std::string& id);
-  
+  Design* GetDesign(const std::string& id) const;
+
   /// Print the module to an output stream.
-  void print(std::ostream& os);
+  virtual void Print(std::ostream& os) const override;
 
  private:
-  std::string _module_id; ///< Human readable identifier for the module
-  Context& _context;      ///< The LLVMContext from which types and
+  virtual void _record(Value* v) override;
+
+ private:
+  Context& _context;      ///< The Context from which types and
                           ///< constants are allocated.
-  SymbolTable _symtab;
+  Records _records;
 }; // end class Module
 
 

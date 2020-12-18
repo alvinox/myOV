@@ -19,10 +19,11 @@ class Type {
     WireTyID,        ///<  5: Wire
     MemoryTyID,      ///<  6: Memory
 
-    DesignTyID,      ///<  7: Processes
-    ProcessTyID,     ///<  8: Processes
-    ProcedureTyID,   ///<  9: Procedure
-    StructTyID,      ///< 10: Structures
+    ModuleTyID,      ///<  8: Modules
+    DesignTyID,      ///<  9: Designs
+    ProcessTyID,     ///< 10: Processes
+    ProcedureTyID,   ///< 11: Procedure
+    StructTyID,      ///< 12: Structures
 
     TyIDCount,
   };
@@ -33,27 +34,31 @@ class Type {
  public:
   /// Return the type id for the type. This will return one of the TypeID enum
   /// elements defined above.
-  TypeID getTypeID() const { return _tid; }
+  TypeID GetTypeID() const { return _tid; }
 
   /// Return true if this is 'void'.
-  bool isVoidTy() const { return getTypeID() == VoidTyID; }
+  bool IsVoidTy() const { return GetTypeID() == VoidTyID; }
 
   /// Return true if this is 'float', a 32-bit IEEE fp type.
-  bool isFloatTy() const { return getTypeID() == FloatTyID; }
+  bool IsFloatTy() const { return GetTypeID() == FloatTyID; }
 
   /// Return true if this is 'double', a 64-bit IEEE fp type.
-  bool isDoubleTy() const { return getTypeID() == DoubleTyID; }
+  bool IsDoubleTy() const { return GetTypeID() == DoubleTyID; }
 
   /// Return true if this is one of the six floating-point types
-  bool isFloatingPointTy() const {
-    return getTypeID() == FloatTyID ||
-           getTypeID() == DoubleTyID;
+  bool IsFloatingPointTy() const {
+    return GetTypeID() == FloatTyID ||
+           GetTypeID() == DoubleTyID;
   }
 
   /// Return true if this is an IntegerType of the given width.
-  bool isIntegerTy(unsigned Bitwidth) const;
+  bool IsIntegerTy(unsigned Bitwidth) const;
 
-  bool isDesignTy() const { return getTypeID() == DesignTyID; }
+  bool IsRegisterTyID() const { return GetTypeID() == RegisterTyID; }
+
+  bool IsWireTyID() const { return GetTypeID() == WireTyID; }
+
+  bool IsDesignTy() const { return GetTypeID() == DesignTyID; }
 
  private:
   Context& _context;

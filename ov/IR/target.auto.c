@@ -70,23 +70,20 @@ void test_ip_reset(struct test_ip* obj, char* d, char* q, char* mem, char* wire)
 }
 
 void test_ip_main(struct test_ip* obj, char* d, char* q, char* mem, char* wire) {
-  uint8 r0  = getvalue8 (q, &obj->r0);
-  uint8 r1  = getvalue8 (q, &obj->r1);
+  uint16 w0 = getvalue16(wire, &obj->w0);
+  uint8 w0_auto7to0 = w0 & 0x00FF;
 
-  uint32 w0 = getvalue16(wire, &obj->w0);
-  uint8 w0_auto7to0 = w0 & 0x000F;
+  uint8 w1 = getvalue8(wire, &obj->w1);
+  uint8 w1_auto0to0 = w1 & 0x1;
+  uint8 w1_auto1to1 = w1 & 0x2;
+  uint8 w1_auto2to2 = w1 & 0x4;
 
-  uint8 w1 = getvalue16(wire, &obj->w1);
-  uint8 w1_auto0 = w1 & 0x1;
-  uint8 w1_auto1 = w1 & 0x2;
-  uint8 w1_auto2 = w1 & 0x4;
+  uint8 r1_ssa0 = w1_auto1to1;
+  uint8 r1_ssa1 = w1_auto2to2;
+  uint8 r1_phi  = w1_auto0to0 ? r1_ssa0 : r1_ssa1;
 
   setvalue8(d, &obj->r0, w0_auto7to0);
-  if (w1_auto0) {
-    setvalue8(d, &obj->r1, w1_auto1);
-  } else {
-    setvalue8(d, &obj->r1, w1_auto2);
-  }
+  setvalue8(d, &obj->r1, r1_phi);
 }
 
 void test_ip_pre_update(struct test_ip* obj, char* d, char* q, char* mem, char* wire) {

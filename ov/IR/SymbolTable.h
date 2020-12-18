@@ -9,28 +9,23 @@
 
 namespace ir {
 
+class Value;
 class SymbolTable;
 
 class Symbol {
  friend class SymbolTable;
  public:
-  // enum SymbolScope {
-  //   ModuleScope,
-  //   DesignScope,
-  //   LocalScope,
-  // };
 
-  std::string getName() const { return _name; }
-  Value* getValue() const { return _value; }
+  // std::string GetName() const { return _name; }
+  Value* GetValue() const { return _value; }
 
  private:
-  Symbol(const std::string& name, unsigned index, Value* value)
-    : _name(name), _index(index), _value(value) { }
+  Symbol(unsigned index, Value* value)
+    : _index(index), _value(value) { }
 
  private:
   unsigned    _index;
-  std::string _name;
-  // SymbolScope _scope;
+  // std::string _name;
   Value*      _value;
 };
 
@@ -50,8 +45,14 @@ class SymbolTable {
 
   Symbol& cbegin() const;
   Symbol& cend()   const;
+  
+  void Clear() {
+    for (Symbol& s : _v) {
+      delete s._value;
+    }
+  }
 
-  Symbol& Define (const std::string& name, Value* value);
+  Symbol& Define (Value* value);
   Symbol& Resolve(const std::string& name, bool& ok);
 
  private:

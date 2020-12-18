@@ -22,14 +22,14 @@ class ProcessType final : public Type {
 
  public:
   /// Parameter type accessors.
-  Type *getParamType(unsigned i) const { return _params[i]; }
+  Type *GetParamType(unsigned i) const { return _params[i]; }
   
   /// Return the number of fixed parameters this function type requires.
-  unsigned getNumParams() const { return static_cast<unsigned>(_params.size()); }
+  unsigned GetNumParams() const { return static_cast<unsigned>(_params.size()); }
 
   /// Methods for support type inquiry through isa, cast, and dyn_cast.
-  static bool classof(const Type *t) {
-    return t->getTypeID() == ProcessTyID;
+  static bool Classof(const Type *t) {
+    return t->GetTypeID() == ProcessTyID;
   }
 
  private:

@@ -2,35 +2,36 @@
 
 namespace ir {
 
-Symbol& Module::Define(Design* design) {
-  const std::string& name = design->ID();
-
-  Symbol& sym = _symtab.Define(name, design);
-  return sym;
+Module::Module(const std::string& id, Context &c)
+  : _context(c), Scope(id) {
+  const Type* t = _context.GetType(static_cast<unsigned>(Type::ModuleTyID));
+  this->SetType(t);
+  // the root module and parent scope is nullptr
 }
 
-void Module::print(std::ostream& os) {
-  std::vector<Value*> designs;
+Design* Module::GetDesign(const std::string& id) const {
+  bool ok = false;
+  Value* v = const_cast<Module*>(this)->ResolveValue(id, ok);
+  if (!ok) return nullptr;
 
-  SymbolTable::const_iterator it = _symtab.begin();
-  for (; it != _symtab.end(); ++it) {
-    Value* v = it->getValue();
-    const Type* t = v->getType();
-    Type::TypeID tid = t->getTypeID();
+  Design* d = dynamic_cast<Design*>(v);
+  return d;
+}
 
-    switch (tid)
-    {
-    case Type::DesignTyID: designs.push_back(v); break;
-    
-    default:
-      break;
-    }
+void Module::Print(std::ostream& os) const {
+  os << "Module " << GetID() << std::endl;
+  for (const std::string& d : _records._designs) {
+    Design* design = GetDesign(d);
+    design->Print(os);
   }
+}
 
-  for (auto v : designs) {
-    v->print(os);
+void Module::_record(Value* v) {
+  if (v->GetType()->IsDesignTy()) {
+    _records._designs.push_back(v->GetID());
+  } else {
+    assert(0 && "invalid value type");
   }
-
 }
 
 } // end namespace ir

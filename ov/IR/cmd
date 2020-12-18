@@ -1,3 +1,1 @@
-clang++ -g -O3 Module.cpp Design.cpp main.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o toy
-
-g++ -g -O3 Context.cpp Logic.cpp SymbolTable.cpp Module.cpp Design.cpp main.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o toy
+clang++ -g Logic.cpp Scope.cpp Design.cpp SymbolTable.cpp Context.cpp Module.cpp main.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -frtti -o toy

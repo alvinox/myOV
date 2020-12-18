@@ -2,7 +2,7 @@
 
 namespace ir {
 
-Symbol SymbolTable::nil("nil", 0, nullptr);
+Symbol SymbolTable::nil(0, nullptr);
 
 void SymbolTable::clear() {
   for (Symbol s : _v) {
@@ -10,10 +10,11 @@ void SymbolTable::clear() {
   }
 }
 
-Symbol& SymbolTable::Define (const std::string& name, Value* value) {
+Symbol& SymbolTable::Define (Value* value) {
   unsigned index = static_cast<unsigned>(_v.size());
-  Symbol sym(name, index, value);
+  Symbol sym(index, value);
 
+  const std::string& name = value->GetID();
   _v.push_back(sym);
   _map[name] = index;
 
@@ -27,7 +28,7 @@ Symbol& SymbolTable::Resolve(const std::string& name, bool& ok) {
     return _v[_map[name]];
   }
 
-  return nil;
+  return SymbolTable::nil;
 }
 
 } // end namespace ir

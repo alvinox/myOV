@@ -45,12 +45,12 @@ class ConstantInt final : public Constant {
   int _val;
 };
 
-class ConstantInt final : public Constant {
+class ConstantFloat final : public Constant {
  public:
   static Value* get(Context& context, float v);
  public:
 
-  ConstantInt(float v);
+  ConstantFloat(float v);
  private:
   float _val;
 }
