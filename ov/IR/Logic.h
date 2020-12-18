@@ -15,16 +15,16 @@ class Logic : public Value {
  public:
  protected:
   Logic(const std::string& id, Scope* p, unsigned hi, unsigned lo)
-    : _parent(p), _hi(hi), _lo(lo), Value(id) {
+    : _parent_scope(p), _hi(hi), _lo(lo), Value(id) {
       assert(hi >= lo && "higher bit is less than lower bit");
     }
 
  public:
-   virtual Context& GetContext() const { return _parent->GetContext(); };
+   virtual Context& GetContext() const { return _parent_scope->GetContext(); };
 
  private:
   std::string _id;
-  Scope* _parent; ///< parent design/process/procedure for the logic
+  Scope* _parent_scope; ///< parent design/process/procedure for the logic
 
   unsigned _hi;
   unsigned _lo;

@@ -19,18 +19,18 @@ Module* create_module() {
   Register* r1   = Register::Create("r1", design);
   Wire*     w0   = Wire::Create("w0", design, 13, 0);
   Wire*     w1   = Wire::Create("w1", design, 4);
-/*
+
   ////////////// Procedure reset ////////////////
   bool ok = false;
   Procedure* proc_reset = Procedure::Create("reset", design);
-  Symbol& r0 = proc_reset->Resolve("r0", ok);
-  assert(ok && "undefined identifier");
-  proc_reset->SetReg(r0, ConstantInt(0));
+  // Symbol& r0 = proc_reset->Resolve("r0", ok);
+  // assert(ok && "undefined identifier");
+  // proc_reset->Emit(Code::SetValue8, r0->GetValue(), ConstantInt(0));
 
-  Symbol& r1 = proc_reset->Resolve("r1", ok);
-  assert(ok && "undefined identifier");
-  proc_reset->SetReg(r1, ConstantInt(0));
-
+  // Symbol& r1 = proc_reset->Resolve("r1", ok);
+  // assert(ok && "undefined identifier");
+  // proc_reset->SetReg(r1, ConstantInt(0));
+/*
   ////////////// Procedure main ////////////////
   Procedure* proc_main = Procedure::Create("main", design);
   Symbol& w0 = proc_main->Resolve("w0", ok);

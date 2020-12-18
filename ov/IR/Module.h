@@ -30,6 +30,7 @@ class Module final : public Scope {
   /// @returns Context - a container for global information
   virtual Context& GetContext() const override { return _context; }
 
+
   /// Look up the specified design in the module symbol table. If it does not
   /// exist, return null.
   Design* GetDesign(const std::string& id) const;

@@ -9,20 +9,23 @@
 #include "Logic.h"
 #include "Module.h"
 #include "Process.h"
+#include "Procedure.h"
 #include "SymbolTable.h"
 
 namespace ir {
 
 class Module;
 class Process;
+class Procedure;
 class Register;
 class Wire;
 
 class Design final : public Scope {
  public:
   struct Records {
-    std::vector<std::string> _registers; ///< record the registers
-    std::vector<std::string> _wires;     ///< record the wires 
+    std::vector<std::string> _registers;  ///< record the registers
+    std::vector<std::string> _wires;      ///< record the wires
+    std::vector<std::string> _procedures; ///< record the procedures
   };
 
  public:
@@ -47,6 +50,14 @@ class Design final : public Scope {
   /// exist, return null.
   // Process* getTemplateParam(const std::string& id);
 
+  /// Look up the specified process in the design symbol table. If it does not
+  /// exist, return null.
+  // Process* GetProcess(const std::string& id);
+
+  /// Look up the specified procedure in the design symbol table. If it does not
+  /// exist, return null.
+  Procedure* GetProcedure(const std::string& id) const;
+
   /// Look up the specified register in the design symbol table. If it does not
   /// exist, return null.
   Register* GetRegister(const std::string& id) const;
@@ -58,14 +69,6 @@ class Design final : public Scope {
   /// Look up the specified memory in the design symbol table. If it does not
   /// exist, return null.
   // Process* getMemory(const std::string& id);
-
-  /// Look up the specified process in the design symbol table. If it does not
-  /// exist, return null.
-  // Process* getProcess(const std::string& id);
-
-  /// Look up the specified procedure in the design symbol table. If it does not
-  /// exist, return null.
-  // Procedure* getProcedure(const std::string& id);
 
   /// Print the design to an output stream.
   virtual void Print(std::ostream& os) const override;
