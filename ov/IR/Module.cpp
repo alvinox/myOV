@@ -3,10 +3,9 @@
 namespace ir {
 
 Module::Module(const std::string& id, Context &c)
-  : _context(c), Scope(id) {
+  : _context(c), Scope(id, nullptr) {
   const Type* t = _context.GetType(static_cast<unsigned>(Type::ModuleTyID));
   this->SetType(t);
-  // the root module and parent scope is nullptr
 }
 
 Design* Module::GetDesign(const std::string& id) const {

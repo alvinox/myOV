@@ -39,7 +39,7 @@ class Procedure final : public Scope {
   virtual void _record(Value* v) override;
 
  private:
-  Design* _parent_design; ///< parent design for the procedure
+  // Design* _parent_design; ///< parent design for the procedure
   Records _records;
 };
 

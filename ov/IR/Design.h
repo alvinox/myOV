@@ -77,7 +77,7 @@ class Design final : public Scope {
   virtual void _record(Value* v) override;
 
  private:
-  Module* _parent_module; ///< parent module for the design
+  // Module* _parent_module; ///< parent module for the design
   Records _records;
 
   // std::string _design_id; ///< Human readable identifier for the design

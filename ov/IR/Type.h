@@ -58,6 +58,8 @@ class Type {
 
   bool IsWireTyID() const { return GetTypeID() == WireTyID; }
 
+  bool IsModuleTy() const { return GetTypeID() == ModuleTyID; }
+
   bool IsDesignTy() const { return GetTypeID() == DesignTyID; }
 
  private:

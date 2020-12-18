@@ -3,7 +3,7 @@
 namespace ir {
 
 Procedure::Procedure(const std::string& id, Design* d)
-  : _parent_design(d), Scope(id) { 
+  : Scope(id, d) {
 
     Context& context = this->GetContext();
     const Type* t = context.GetType(static_cast<unsigned>(Type::ProcedureTyID));
@@ -13,7 +13,7 @@ Procedure::Procedure(const std::string& id, Design* d)
 }
 
 Context& Procedure::GetContext() const {
-  return _parent_design->GetContext();
+  return GetParent()->GetContext();
 }
 
 void Procedure::Print(std::ostream& os) const {

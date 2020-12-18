@@ -11,7 +11,12 @@ Symbol& Scope::Define(Value* v) {
 }
 
 Symbol& Scope::Resolve(const std::string& name, bool& ok) {
-  Symbol& sym = GetSymbolTable().Resolve(name, ok);
+  Symbol& sym = this->GetSymbolTable().Resolve(name, ok);
+  if (!ok) {
+    Scope* scope = GetParent();
+    sym = scope->Resolve(name, ok);
+  }
+
   return sym;
 }
 

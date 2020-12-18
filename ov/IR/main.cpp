@@ -9,9 +9,26 @@
 
 namespace ir {
 
-Module* create_module() {
-  Context context;
-  Module* module = new Module("test_ip.sv", context);
+Procedure* create_procedure_reset(Scope* node) {
+  assert(node->GetType()->IsDesignTy());
+  Design* design = dynamic_cast<Design*>(node);
+
+  Procedure* proc = Procedure::Create("reset", design);
+  bool ok = false;
+  Symbol& r0 = proc->Resolve("r0", ok);
+  assert(ok && "undefined identifier");
+  // proc_reset->Emit(Code::SetValue8, r0->GetValue(), ConstantInt(0));
+
+  Symbol& r1 = proc->Resolve("r1", ok);
+  assert(ok && "undefined identifier");
+  // proc_reset->SetReg(r1, ConstantInt(0));
+
+  return proc;
+}
+
+Design* create_design(Scope* node) {
+  assert(node->GetType()->IsModuleTy());
+  Module* module = dynamic_cast<Module*>(node);
 
   Design* design = Design::Create("test_ip", module);
 
@@ -20,9 +37,27 @@ Module* create_module() {
   Wire*     w0   = Wire::Create("w0", design, 13, 0);
   Wire*     w1   = Wire::Create("w1", design, 4);
 
+  return design;
+}
+
+Module* create_module() {
+  Context context;
+  Module* module = new Module("test_ip.sv", context);
+
+  Design* design = create_design(module);
+
+  Procedure* proc = create_procedure_reset(design);
+
+  // Design* design = Design::Create("test_ip", module);
+
+  // Register* r0   = Register::Create("r0", design, 7, 0);
+  // Register* r1   = Register::Create("r1", design);
+  // Wire*     w0   = Wire::Create("w0", design, 13, 0);
+  // Wire*     w1   = Wire::Create("w1", design, 4);
+
   ////////////// Procedure reset ////////////////
-  bool ok = false;
-  Procedure* proc_reset = Procedure::Create("reset", design);
+  // bool ok = false;
+  // Procedure* proc_reset = Procedure::Create("reset", design);
   // Symbol& r0 = proc_reset->Resolve("r0", ok);
   // assert(ok && "undefined identifier");
   // proc_reset->Emit(Code::SetValue8, r0->GetValue(), ConstantInt(0));
