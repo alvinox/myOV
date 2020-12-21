@@ -5,7 +5,7 @@ namespace ir {
 Symbol& Scope::Define(Value* v) {
   Symbol& sym = GetSymbolTable().Define(v);
 
-  // _record(v);
+  AppendLocal(v);
 
   return sym;
 }
@@ -36,7 +36,6 @@ void Scope::PrintInstruction(std::ostream& os, unsigned lv) const {
 
   for (Instruction* inst : _instructions) {
     inst->Print(os, lv + 1);
-    os << std::endl;
   }
 }
 

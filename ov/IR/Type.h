@@ -11,7 +11,6 @@ class Type {
  public:
   enum TypeID {
     VoidTyID = 0,    ///<  0: type with no size
-    // HalfTyID,     ///<  1: 16-bit floating point type
     FloatTyID,       ///<  1: 32-bit floating point type
     DoubleTyID,      ///<  2: 64-bit floating point type
     IntegerTyID,     ///<  3: Arbitrary bit width integers
@@ -24,6 +23,10 @@ class Type {
     ProcessTyID,     ///< 10: Processes
     ProcedureTyID,   ///< 11: Procedure
     StructTyID,      ///< 12: Structures
+
+    UnaryExprTyID,   ///<   : Unary   Expression
+    BinaryExprTyID,  ///<   : Binary  Expression
+    TernaryExprTyID, ///<   : Ternary Expression
 
     TyIDCount,
   };
@@ -61,6 +64,14 @@ class Type {
   bool IsModuleTy() const { return GetTypeID() == ModuleTyID; }
 
   bool IsDesignTy() const { return GetTypeID() == DesignTyID; }
+
+  bool IsUnaryExprTy() const { return GetTypeID() == UnaryExprTyID; }
+
+  bool IsBinaryExprTy() const { return GetTypeID() == BinaryExprTyID; }
+
+  bool IsTernaryExprTy() const { return GetTypeID() == TernaryExprTyID; }
+
+  bool IsExpressionTy() const { return IsUnaryExprTy() || IsBinaryExprTy() || IsTernaryExprTy(); }
 
  private:
   Context& _context;

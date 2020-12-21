@@ -13,7 +13,7 @@ ConstantInt::ConstantInt(Context& context, int v)
   this->SetType(t);
 }
 
-Value* ConstantInt::get(Context& context, int v) {
+Value* ConstantInt::Get(Context& context, int v) {
   return context.GetInt(v);
 }
 

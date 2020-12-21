@@ -8,6 +8,7 @@
 #include "Module.h"
 #include "Logic.h"
 #include "IRBuilder.h"
+#include "Expression.h"
 
 namespace ir {
 
@@ -27,13 +28,70 @@ Value* walk_procedure_reset(Value* node) {
   Symbol& r0 = proc->Resolve("r0", ok);
   assert(ok && "undefined identifier");
   Logic* r0_logic = static_cast<Logic*>(r0.GetValue());
-  builder.CreateSetValue(r0_logic, ConstantInt::get(context, 0));
+  builder.CreateSetValue(r0_logic, ConstantInt::Get(context, 0));
 
   Symbol& r1 = proc->Resolve("r1", ok);
   assert(ok && "undefined identifier");
   Logic* r1_logic = static_cast<Logic*>(r1.GetValue());
-  builder.CreateSetValue(r1_logic, ConstantInt::get(context, 0));
+  builder.CreateSetValue(r1_logic, ConstantInt::Get(context, 0));
 
+  builder.SetInsertPoint(design);
+  return proc;
+}
+
+Value* walk_procedure_main(Value* node) {
+  assert(node->GetType()->IsDesignTy());
+  Design* design = dynamic_cast<Design*>(node);
+  Context& context = design->GetContext();
+
+  Procedure* proc = Procedure::Create("main", design);
+  builder.CreateProcedure(proc);
+  builder.SetInsertPoint(proc);
+
+  bool ok = false;
+  Symbol& w0 = proc->Resolve("w0", ok);
+  Logic* w0_logic = static_cast<Logic*>(w0.GetValue());
+  builder.CreateGetValue(w0_logic);
+
+  Value* w0_auto7to0_mask = ConstantInt::Get(context, 0xFF);
+  BinaryExpr* op0 = BinaryExpr::Create(BinaryExpr::BitAndOpID, w0_logic, w0_auto7to0_mask, proc);
+  Wire* w0_auto7to0 = Wire::Create("w0_auto7to0", proc, 7, 0);
+  builder.CreateAssign(w0_auto7to0, op0);
+
+  Symbol& w1 = proc->Resolve("w1", ok);
+  Logic* w1_logic = static_cast<Logic*>(w1.GetValue());
+  builder.CreateGetValue(w1_logic);
+
+  Value* w1_auto0to0_mask = ConstantInt::Get(context, 0x1);
+  BinaryExpr* op1 = BinaryExpr::Create(BinaryExpr::BitAndOpID, w1_logic, w1_auto0to0_mask, proc);
+  Wire* w1_auto0to0 = Wire::Create("w1_auto0to0", proc, 0, 0);
+  builder.CreateAssign(w1_auto0to0, op1);
+  Value* w1_auto1to1_mask = ConstantInt::Get(context, 0x2);
+  BinaryExpr* op2 = BinaryExpr::Create(BinaryExpr::BitAndOpID, w1_logic, w1_auto1to1_mask, proc);
+  Wire* w1_auto1to1 = Wire::Create("w1_auto1to1", proc, 1, 1);
+  builder.CreateAssign(w1_auto1to1, op2);
+  Value* w1_auto2to2_mask = ConstantInt::Get(context, 0x4);
+  BinaryExpr* op3 = BinaryExpr::Create(BinaryExpr::BitAndOpID, w1_logic, w1_auto2to2_mask, proc);
+  Wire* w1_auto2to2 = Wire::Create("w1_auto2to2", proc, 1, 1);
+  builder.CreateAssign(w1_auto2to2, op3);
+
+  Wire* r1_ssa0 = Wire::Create("r1_ssa0", proc, 0, 0);
+  builder.CreateAssign(r1_ssa0, w1_auto0to0);
+  Wire* r1_ssa1 = Wire::Create("r1_ssa1", proc, 0, 0);
+  builder.CreateAssign(r1_ssa1, w1_auto1to1);
+
+  TernaryExpr* select = TernaryExpr::Create(TernaryExpr::SelectOpID, w1_auto0to0, w1_auto1to1, w1_auto2to2, proc);
+  Wire* r1_phi = Wire::Create("r1_phi", proc, 0, 0);
+  builder.CreateAssign(r1_phi, select);
+
+  Symbol& r0 = proc->Resolve("r0", ok);
+  Logic* r0_logic = static_cast<Logic*>(r0.GetValue());
+  builder.CreateSetValue(r0_logic, w0_auto7to0);
+  Symbol& r1 = proc->Resolve("r1", ok);
+  Logic* r1_logic = static_cast<Logic*>(r1.GetValue());
+  builder.CreateSetValue(r1_logic, r1_phi);
+
+  builder.SetInsertPoint(design);
   return proc;
 }
 
@@ -54,6 +112,10 @@ Value* walk_design(Value* node) {
   Wire*     w1   = Wire::Create("w1", design, 4);
   builder.CreateWire(w1);
 
+  Value* proc = walk_procedure_reset(design);
+         proc = walk_procedure_main(design);
+
+  builder.SetInsertPoint(module);
   return design;
 }
 
@@ -63,65 +125,6 @@ Value* walk_module() {
 
   Value* design = walk_design(module);
 
-  Value* proc = walk_procedure_reset(design);
-
-  // Design* design = Design::Create("test_ip", module);
-
-  // Register* r0   = Register::Create("r0", design, 7, 0);
-  // Register* r1   = Register::Create("r1", design);
-  // Wire*     w0   = Wire::Create("w0", design, 13, 0);
-  // Wire*     w1   = Wire::Create("w1", design, 4);
-
-  ////////////// Procedure reset ////////////////
-  // bool ok = false;
-  // Procedure* proc_reset = Procedure::Create("reset", design);
-  // Symbol& r0 = proc_reset->Resolve("r0", ok);
-  // assert(ok && "undefined identifier");
-  // proc_reset->Emit(Code::SetValue8, r0->GetValue(), ConstantInt(0));
-
-  // Symbol& r1 = proc_reset->Resolve("r1", ok);
-  // assert(ok && "undefined identifier");
-  // proc_reset->SetReg(r1, ConstantInt(0));
-/*
-  ////////////// Procedure main ////////////////
-  Procedure* proc_main = Procedure::Create("main", design);
-  Symbol& w0 = proc_main->Resolve("w0", ok);
-  proc_main->Emit(Code::GetValue16, w0->GetValue());
-  Wire* w0_auto7to0 = Wire::Create("w0_auto7to0", proc_main, 7, 0);
-  proc_main->Emit(Code::Mask, w0->GetValue(), w0_auto7to0);
-  // Symbol& r0 = proc_reset->Resolve("r0", ok);
-  proc_main->Emit(Code::SetValue8, r0->GetValue(), w0_auto7to0);
-
-  Symbol& w0 = proc_main->Resolve("w1", ok);
-  proc_main->Emit(Code::GetValue8, w1->GetValue());
-  Wire* w1_auto0to0 = Wire::Create("w1_auto0to0", proc_main, 0, 0);
-  proc_main->Emit(Code::Mask, w1->GetValue(), w1_auto0to0);
-  Wire* w1_auto1to1 = Wire::Create("w1_auto1to1", proc_main, 1, 1);
-  proc_main->Emit(Code::Mask, w1->GetValue(), w1_auto0to0);
-  Wire* w1_auto2to2 = Wire::Create("w1_auto2to2", proc_main, 2, 2);
-  proc_main->Emit(Code::Mask, w1->GetValue(), w1_auto2to2);
-
-  proc_main->Emit(Code::Nop);
-  // Symbol& r1 = proc_reset->Resolve("r1", ok);
-  Register* r1_value = dynamic_cast<Register*>(r1->GetValue());
-  Wire* r1_ssa0 = Wire::Create("r1_ssa0", proc_main);
-  r1_ssa0->CopyBits(r1_value);
-  proc_main->Emit(Code::SetLocal, w1_auto1to1);
-  proc_main->Emit(Code::Assign, r1_ssa0);
-  Wire* r1_ssa1 = Wire::Create("r1_ssa1", proc_main);
-  r1_ssa1->CopyBits(r1_value);
-  proc_main->Emit(Code::SetLocal, w1_auto2to2);
-  proc_main->Emit(Code::Assign, r1_ssa1);
-
-  proc_main->Emit(Code::SetLocal, w1_auto0to0);
-  proc_main->Emit(Code::SetLocal, r1_ssa0);
-  proc_main->Emit(Code::SetLocal, r1_ssa1);
-  proc_main->Emit(Code::TernaryOp);
-  Wire* r1_phi = Wire::Create("r1_phi", proc_main);
-  proc_main->Emit(Code::Assign, r1_phi);
-
-  proc_main->Emit(Code::SetValue8, r1->GetValue(), r1_phi);
-*/
   return module;
 }
 
@@ -133,7 +136,6 @@ int main() {
   module->PrintInstruction(std::cout);
 
   // IRGen::genLLVMIR(m);
-
 
   return 0;
 }

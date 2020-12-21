@@ -16,11 +16,6 @@ class Design;
 
 class Module final : public Scope {
  public:
-  // struct Records {
-  //   std::vector<std::string> _designs; ///< record the designs
-  // };
-
- public:
   explicit Module(const std::string& id, Context &c);
 
  public:
@@ -33,36 +28,11 @@ class Module final : public Scope {
   /// exist, return null.
   Design* GetDesign(const std::string& id) const;
 
-  /// Print the module to an output stream.
-  // virtual void Print(std::ostream& os) const override;
-
-//  private:
-  // virtual void _record(Value* v) override;
-
  private:
   Context& _context;      ///< The Context from which types and
                           ///< constants are allocated.
-  // Records _records;
 }; // end class Module
 
-
-// class Procedure {
-// };
-
-// class TemplateParam final : public Value {
-// };
-
-// class Logic: public Value {
-// };
-
-// class Register : public Logic {
-// };
-
-// class Wire : public Logic {
-// };
-
-// class Memory : public Logic {
-// };
 } // end namespace ir
 
 #endif // _MODULE_H_

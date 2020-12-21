@@ -2,6 +2,7 @@
 #include "Design.h"
 #include "Procedure.h"
 #include "Logic.h"
+#include "Expression.h"
 
 namespace ir {
 
@@ -23,14 +24,15 @@ std::map<Instruction::InstID, std::string> Instruction::NameMap = {
     {GetValue8InstID,      "GetValue8"},
     {SetValue16InstID,     "SetValue16"},
     {GetValue16InstID,     "GetValue16"},
+
+    {AssignInstID,         "Assign"},
 };
 
 void Instruction::Print(std::ostream& os, unsigned lv) const {
   std::string indent = Indent(lv);
   const std::string& ins = IDtoString(tid);
 
-  switch (tid)
-  {
+  switch (tid) {
     case DesignInstID: {
       Design* d = dynamic_cast<Design*>(operands[0]);
       os << indent << d->GetID() << "(" << ins << ")" << std::endl;
@@ -48,23 +50,48 @@ void Instruction::Print(std::ostream& os, unsigned lv) const {
     case RegisterInstID: {
       Register* r = dynamic_cast<Register*>(operands[0]);
       os << indent << r->GetID() << "(" << ins << r->RangeStr() << ")";
+      os << std::endl;
       break;
     }
 
     case WireInstID: {
       Wire* w = dynamic_cast<Wire*>(operands[0]);
       os << indent << w->GetID() << "(" << ins << w->RangeStr() << ")";
+      os << std::endl;
       break;
     }
 
-    case SetValue8InstID: {
+    case SetValue8InstID:
+    case SetValue16InstID: {
       Logic* lhs = dynamic_cast<Logic*>(operands[0]);
       Value* rhs = operands[1];
       os << indent << ins << " " << lhs->GetID() << " " << rhs->GetID();
+      os << std::endl;
+      break;
     }
 
-  default:
-    break;
+    case GetValue8InstID:
+    case GetValue16InstID: {
+      Logic* lhs = dynamic_cast<Logic*>(operands[0]);
+      os << indent << ins << " " << lhs->GetID();
+      os << std::endl;
+      break;
+    }
+
+    case AssignInstID: {
+      Logic* lv = dynamic_cast<Logic*>(operands[0]);
+      Value* rv = operands[1];
+      std::string rv_str = rv->GetID();
+      if (rv->GetType()->IsExpressionTy()) {
+        rv_str = dynamic_cast<Expr*>(rv)->GetExpr();
+      }
+      os << indent << ins << " " << lv->GetID() << " = " << rv_str;
+      os << std::endl;
+      break;
+    }
+
+    default:
+      break;
   }
 }
 

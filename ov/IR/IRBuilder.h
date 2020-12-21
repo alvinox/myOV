@@ -23,9 +23,11 @@ class IRBuilder {
   Instruction* CreateRegister   (Register* reg);
   Instruction* CreateWire       (Wire* wire);
   Instruction* CreateSetValue   (Logic* l, Value* v);
+  Instruction* CreateGetValue   (Logic* l);
+  Instruction* CreateAssign     (Logic* l, Value* v);
  
  private:
-  Instruction* _insert(Instruction* inst) { return _scope->InsertInstruction(inst); }
+  Instruction* _insert(Instruction* inst) { return _scope->AppendInstruction(inst); }
 
  private:
   Scope* _scope;

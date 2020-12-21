@@ -28,6 +28,9 @@ class Instruction {
     SetValue16InstID,
     GetValue16InstID,
 
+    // operation
+    AssignInstID,
+
     InstIDCount,
   };
 

@@ -44,8 +44,6 @@ class Register final : public Logic {
   Register(const std::string& id, Scope* s, unsigned hi = 0, unsigned lo = 0);
  
  public:
-  /// Print the register to an output stream.
-  // virtual void Print(std::ostream& os) const override;
 
  private:
 };
@@ -59,8 +57,6 @@ class Wire final : public Logic {
   Wire(const std::string& id, Scope* s, unsigned hi = 0, unsigned lo = 0);
 
  public:
-  /// Print the register to an output stream.
-  // virtual void Print(std::ostream& os) const override;
 
  private:
 };

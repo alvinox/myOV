@@ -18,12 +18,6 @@ class Value {
 
  public:
 
-  // Module* GetModule() const { return _module; }
-  // void    SetModule(Module* m) { _module = m; }
-
-  // Scope*  GetParent() const { return _parent; }
-  // void    SetParent(Scope* p) { _parent = p ;}
-
   const std::string& GetID() const { return _id; }
   void SetID(const std::string& id) { _id = id; }
 
@@ -33,8 +27,6 @@ class Value {
   virtual void Print(std::ostream& os) const { os << _id; }
 
  private:
-  // Module* _module; // root scope
-  // Scope*  _parent; // parent scope
   std::string _id; // Human readable identifier
   const Type* _type;
 };

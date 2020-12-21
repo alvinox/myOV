@@ -4,12 +4,6 @@ namespace ir {
 
 Symbol SymbolTable::nil(0, nullptr);
 
-void SymbolTable::clear() {
-  for (Symbol s : _v) {
-    delete s._value;
-  }
-}
-
 Symbol& SymbolTable::Define (Value* value) {
   unsigned index = static_cast<unsigned>(_v.size());
   Symbol sym(index, value);

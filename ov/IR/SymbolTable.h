@@ -16,7 +16,6 @@ class Symbol {
  friend class SymbolTable;
  public:
 
-  // std::string GetName() const { return _name; }
   Value* GetValue() const { return _value; }
 
  private:
@@ -25,7 +24,6 @@ class Symbol {
 
  private:
   unsigned    _index;
-  // std::string _name;
   Value*      _value;
 };
 
@@ -41,7 +39,7 @@ class SymbolTable {
   const_iterator end()   { return _v.cend(); }
 
  public:
-  void clear();
+  // void clear();
 
   Symbol& cbegin() const;
   Symbol& cend()   const;
@@ -59,7 +57,6 @@ class SymbolTable {
   std::map<std::string, unsigned> _map;
   SymbolList _v;
 };
-
 
 } // end namespace ir
 

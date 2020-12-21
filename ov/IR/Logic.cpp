@@ -21,10 +21,6 @@ Register::Register(const std::string& id, Scope* s, unsigned hi, unsigned lo)
 
 }
 
-// void Register::Print(std::ostream& os) const {
-//   os << "    Register " << GetID() << std::endl;
-// }
-
 //---------------------  Wire  ------------------------//
 
 Wire::Wire(const std::string& id, Scope* s, unsigned hi, unsigned lo) 
@@ -36,9 +32,5 @@ Wire::Wire(const std::string& id, Scope* s, unsigned hi, unsigned lo)
   s->Define(this);
 
 }
-
-// void Wire::Print(std::ostream& os) const {
-//   os << "    Wire " << GetID() << std::endl;
-// }
 
 } // end namespace ir

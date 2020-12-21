@@ -34,14 +34,14 @@ namespace ir {
 
 class Constant : public Value {
  public:
-  Constant(const std::string& id, const Type* type = nullptr)
-    : Value(id, type) { }
+  Constant(const std::string& id)
+    : Value(id, nullptr) { }
 };
 
 class ConstantInt final : public Constant {
  friend class Context;
  public:
-  static Value* get(Context& context, int v);
+  static Value* Get(Context& context, int v);
 
  private:
   ConstantInt(Context& context, int v);
@@ -52,7 +52,7 @@ class ConstantInt final : public Constant {
 
 class ConstantFloat final : public Constant {
  public:
-  static Value* get(Context& context, float v);
+  static Value* Get(Context& context, float v);
  public:
 
   ConstantFloat(float v);

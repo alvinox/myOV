@@ -14,14 +14,15 @@ class Scope : public Value {
     : _parent(p), Value(id) {}
 
   virtual ~Scope() {
-    _symtab.Clear();
+    for (Value* v : _locals) {
+      delete v;
+    }
+
     for (Instruction* inst : _instructions) {
       delete inst;
     }
   }
 
-  // Scope(const std::string& id, const Type* type) 
-  //   : Value(id, type) {}
  public:
   virtual Context& GetContext() const = 0;
 
@@ -33,18 +34,18 @@ class Scope : public Value {
   Symbol& Resolve(const std::string& name, bool& ok);
   Value*  ResolveValue(const std::string& name, bool& ok);
   
-  Instruction* InsertInstruction(Instruction* inst) {
+  void AppendLocal(Value* v) { _locals.push_back(v); }
+
+  Instruction* AppendInstruction(Instruction* inst) {
     _instructions.push_back(inst); 
     return inst;
   }
   void PrintInstruction(std::ostream& os, unsigned lv = 0) const;
 
  private:
-  // virtual void _record(Value* v) = 0;
-
- private:
   SymbolTable _symtab;
   Scope*      _parent; ///< parent scope
+  std::vector<Value*> _locals; ///< local values
 
   std::vector<Instruction*> _instructions;
 };
