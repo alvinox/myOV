@@ -27,10 +27,12 @@ Value*  Scope::ResolveValue(const std::string& name, bool& ok) {
   return v;
 }
 
-void Scope::Print(std::ostream& os, unsigned lv) const {
+void Scope::PrintInstruction(std::ostream& os, unsigned lv) const {
   std::string indent = Indent(lv);
 
-  os << indent << GetID() << std::endl;
+  if (this->GetType()->IsModuleTy()) {
+    os << indent << GetID() << std::endl;
+  }
 
   for (Instruction* inst : _instructions) {
     inst->Print(os, lv + 1);

@@ -21,17 +21,17 @@ class Context {
   const Type* GetType(unsigned tid) { 
       Type* t = _type_map[tid];
       return t;
-    // try {
-    //   Type* t = _type_map[tid];
-    //   return t;
-    // } catch {
-
-    // }
   } 
 
+  ///< if ConstantInt already exists in _integers, return _integers[v]
+  ///< else create a new ConstantInt(v), add it to the map and return it
+  Value* GetInt(int v);
+
  private:
-  std::vector<Value*> _constants;
   std::map<unsigned, Type*> _type_map;
+
+  ///< constants map
+  std::map<int, Value*> _integers;
 };
 
 } // end namespace ir

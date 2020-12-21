@@ -2,6 +2,7 @@
 #define _LOGIC_H_
 
 #include <string>
+#include <sstream>
 #include <assert.h>
 
 #include "Value.h"
@@ -21,6 +22,10 @@ class Logic : public Value {
 
  public:
    virtual Context& GetContext() const { return _parent_scope->GetContext(); };
+
+   unsigned GetBits() const { return _hi - _lo + 1; }
+
+   std::string RangeStr() const;
 
  private:
   std::string _id;

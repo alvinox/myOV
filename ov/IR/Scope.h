@@ -37,7 +37,7 @@ class Scope : public Value {
     _instructions.push_back(inst); 
     return inst;
   }
-  void Print(std::ostream& os, unsigned lv = 0) const;
+  void PrintInstruction(std::ostream& os, unsigned lv = 0) const;
 
  private:
   // virtual void _record(Value* v) = 0;

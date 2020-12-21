@@ -25,6 +25,7 @@
 //  private:
 //   APFloat _val;
 // }
+#include <sstream>
 
 #include "Value.h"
 #include "Context.h"
@@ -33,14 +34,18 @@ namespace ir {
 
 class Constant : public Value {
  public:
+  Constant(const std::string& id, const Type* type = nullptr)
+    : Value(id, type) { }
 };
 
 class ConstantInt final : public Constant {
+ friend class Context;
  public:
   static Value* get(Context& context, int v);
- public:
 
-  ConstantInt(int v);
+ private:
+  ConstantInt(Context& context, int v);
+
  private:
   int _val;
 };
@@ -53,7 +58,7 @@ class ConstantFloat final : public Constant {
   ConstantFloat(float v);
  private:
   float _val;
-}
+};
 
 } // end namespace ir
 

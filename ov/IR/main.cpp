@@ -4,6 +4,7 @@
 #include "llvm/ADT/APFloat.h"
 
 #include "Context.h"
+#include "Constants.h"
 #include "Module.h"
 #include "Logic.h"
 #include "IRBuilder.h"
@@ -13,24 +14,30 @@ namespace ir {
 Context   context;
 IRBuilder builder;
 
-Procedure* create_procedure_reset(Scope* node) {
+Value* walk_procedure_reset(Value* node) {
   assert(node->GetType()->IsDesignTy());
   Design* design = dynamic_cast<Design*>(node);
+  Context& context = design->GetContext();
 
   Procedure* proc = Procedure::Create("reset", design);
+  builder.CreateProcedure(proc);
+  builder.SetInsertPoint(proc);
+
   bool ok = false;
   Symbol& r0 = proc->Resolve("r0", ok);
   assert(ok && "undefined identifier");
-  // proc_reset->Emit(Code::SetValue8, r0->GetValue(), ConstantInt(0));
+  Logic* r0_logic = static_cast<Logic*>(r0.GetValue());
+  builder.CreateSetValue(r0_logic, ConstantInt::get(context, 0));
 
   Symbol& r1 = proc->Resolve("r1", ok);
   assert(ok && "undefined identifier");
-  // proc_reset->SetReg(r1, ConstantInt(0));
+  Logic* r1_logic = static_cast<Logic*>(r1.GetValue());
+  builder.CreateSetValue(r1_logic, ConstantInt::get(context, 0));
 
   return proc;
 }
 
-Design* create_design(Scope* node) {
+Value* walk_design(Value* node) {
   assert(node->GetType()->IsModuleTy());
   Module* module = dynamic_cast<Module*>(node);
 
@@ -39,25 +46,24 @@ Design* create_design(Scope* node) {
   builder.SetInsertPoint(design);
 
   Register* r0   = Register::Create("r0", design, 7, 0);
-  // builder.CreateRegister(r0);
+  builder.CreateRegister(r0);
   Register* r1   = Register::Create("r1", design);
-  // builder.CreateRegister(r1);
+  builder.CreateRegister(r1);
   Wire*     w0   = Wire::Create("w0", design, 13, 0);
-  // builder.CreateWire(w0);
+  builder.CreateWire(w0);
   Wire*     w1   = Wire::Create("w1", design, 4);
-  // builder.CreateWire(w1);
+  builder.CreateWire(w1);
 
   return design;
 }
 
-Module* create_module() {
+Value* walk_module() {
   Module* module = new Module("test_ip.sv", context);
   builder.SetInsertPoint(module);
 
+  Value* design = walk_design(module);
 
-  Design* design = create_design(module);
-
-  Procedure* proc = create_procedure_reset(design);
+  Value* proc = walk_procedure_reset(design);
 
   // Design* design = Design::Create("test_ip", module);
 
@@ -122,8 +128,9 @@ Module* create_module() {
 } // end namespace ir
 
 int main() {
-  ir::Module* module = ir::create_module();
-  module->Print(std::cout);
+  ir::Value* root_node = ir::walk_module();
+  ir::Module* module = dynamic_cast<ir::Module*>(root_node);
+  module->PrintInstruction(std::cout);
 
   // IRGen::genLLVMIR(m);
 

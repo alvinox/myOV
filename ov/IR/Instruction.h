@@ -18,8 +18,8 @@ class Instruction {
     DesignInstID,
     InstantiateInstID,
     ProcessInstID,
-    CallInstID,
     ProcedureInstID,
+    CallInstID,
     RegisterInstID,
     WireInstID,
     
@@ -37,7 +37,7 @@ class Instruction {
 
  public:
   explicit Instruction(InstID tid, const std::vector<Value*>& ops)
-   : tid(tid) { 
+   : tid(tid), operands(ops) { 
 
    }
  public:
