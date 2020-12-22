@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <memory>
 
-#include "llvm/ADT/APFloat.h"
+// #include "llvm/ADT/APFloat.h"
 
 #include "Context.h"
 #include "Constants.h"
@@ -95,6 +95,19 @@ Value* walk_procedure_main(Value* node) {
   return proc;
 }
 
+Value* walk_procedure_pre_update(Value* node) {
+  assert(node->GetType()->IsDesignTy());
+  Design* design = dynamic_cast<Design*>(node);
+  Context& context = design->GetContext();
+
+  Procedure* proc = Procedure::Create("pre_update", design);
+  builder.CreateProcedure(proc);
+  builder.SetInsertPoint(proc);
+
+  builder.SetInsertPoint(design);
+  return proc;
+}
+
 Value* walk_design(Value* node) {
   assert(node->GetType()->IsModuleTy());
   Module* module = dynamic_cast<Module*>(node);
@@ -114,6 +127,7 @@ Value* walk_design(Value* node) {
 
   Value* proc = walk_procedure_reset(design);
          proc = walk_procedure_main(design);
+         proc = walk_procedure_pre_update(design);
 
   builder.SetInsertPoint(module);
   return design;
@@ -133,9 +147,9 @@ Value* walk_module() {
 int main() {
   ir::Value* root_node = ir::walk_module();
   ir::Module* module = dynamic_cast<ir::Module*>(root_node);
-  module->PrintInstruction(std::cout);
 
-  // IRGen::genLLVMIR(m);
+  module->PrintInstruction(std::cout); // for degbu
+  module->PrintSimulation(std::cout);
 
   return 0;
 }

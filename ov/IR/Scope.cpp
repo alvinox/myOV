@@ -30,12 +30,21 @@ Value*  Scope::ResolveValue(const std::string& name, bool& ok) {
 void Scope::PrintInstruction(std::ostream& os, unsigned lv) const {
   std::string indent = Indent(lv);
 
+  // Module is the root node
   if (this->GetType()->IsModuleTy()) {
     os << indent << GetID() << std::endl;
   }
 
   for (Instruction* inst : _instructions) {
-    inst->Print(os, lv + 1);
+    inst->PrintInstruction(os, lv + 1);
+  }
+}
+
+void Scope::PrintSimulation(std::ostream& os, unsigned lv) const {
+  std::string indent = Indent(lv);
+
+  for (Instruction* inst : _instructions) {
+    inst->PrintSimulation(os, lv + 1);
   }
 }
 

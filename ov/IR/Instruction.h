@@ -12,10 +12,9 @@ namespace ir {
 
 class Instruction {
 
-
  public:
   enum InstID {
-    DesignInstID,
+    DesignInstID = 0,
     InstantiateInstID,
     ProcessInstID,
     ProcedureInstID,
@@ -45,7 +44,8 @@ class Instruction {
    }
  public:
   unsigned OperandWidths() const { return static_cast<unsigned>(operands.size()); }
-  void Print(std::ostream& os, unsigned lv = 0) const;
+  void PrintInstruction(std::ostream& os, unsigned lv = 0) const;
+  void PrintSimulation(std::ostream& os, unsigned lv = 0) const;
  public:
   InstID tid;
   std::vector<Value*> operands;

@@ -40,7 +40,9 @@ class Scope : public Value {
     _instructions.push_back(inst); 
     return inst;
   }
+
   void PrintInstruction(std::ostream& os, unsigned lv = 0) const;
+  void PrintSimulation(std::ostream& os, unsigned lv = 0) const;
 
  private:
   SymbolTable _symtab;

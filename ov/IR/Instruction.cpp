@@ -28,7 +28,7 @@ std::map<Instruction::InstID, std::string> Instruction::NameMap = {
     {AssignInstID,         "Assign"},
 };
 
-void Instruction::Print(std::ostream& os, unsigned lv) const {
+void Instruction::PrintInstruction(std::ostream& os, unsigned lv) const {
   std::string indent = Indent(lv);
   const std::string& ins = IDtoString(tid);
 
@@ -92,6 +92,50 @@ void Instruction::Print(std::ostream& os, unsigned lv) const {
 
     default:
       break;
+  }
+}
+
+void Instruction::PrintSimulation(std::ostream& os, unsigned lv) const {
+  std::string indent = Indent(lv);
+  const std::string& ins = IDtoString(tid);
+
+  switch (tid) {
+    case DesignInstID: {
+      Design* d = dynamic_cast<Design*>(operands[0]);
+      os << indent << "struct " << d->GetID() << " {" << std::endl;
+      d->PrintSimulation(os, lv);
+      os << indent << "};";
+      os << std::endl;
+      break;
+    }
+
+    case ProcedureInstID: {
+      Procedure* p = dynamic_cast<Procedure*>(operands[0]);
+      Scope* s = p->GetParent();
+      std::string proto = Procedure::GetSimProtoType(s->GetID());
+      os << indent << s->GetID() << "_" << p->GetID() << "(" << proto << ") {" << std::endl;
+      p->PrintSimulation(os, lv);
+      os << indent << "};";
+      os << std::endl;
+      break;
+    }
+
+    case RegisterInstID: {
+      Register* r = dynamic_cast<Register*>(operands[0]);
+      os << indent << "Variable " << r->GetID() << ";";
+      os << "  // reg bits " << r->GetBits();
+      os << std::endl;
+      break;
+    }
+
+    case WireInstID: {
+      Wire* w = dynamic_cast<Wire*>(operands[0]);
+      os << indent << "Variable " << w->GetID() << ";";
+      os << "  // wire bits " << w->GetBits();
+      os << std::endl;
+      break;
+    }
+
   }
 }
 

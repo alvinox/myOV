@@ -1,13 +1,3 @@
-struct test_ip {
-  // register
-  Variable8 r0; // bits: 8
-  Variable8 r1; // bits: 1
-
-  // wire
-  Variable16 w0; // bits: 14
-  Variable8  w1; // bits: 5
-
-};
 
 /* test_ip.ov
 design test_ip {
@@ -63,6 +53,15 @@ module test_ip(
 endmodule
 
 */
+
+struct test_ip {
+  Variable8 r0; // reg bits: 8
+  Variable8 r1; // reg bits: 1
+
+  Variable16 w0; // wire bits: 14
+  Variable8  w1; // wire bits: 5
+
+};
 
 void test_ip_reset(struct test_ip* obj, char* d, char* q, char* mem, char* wire) {
   setvalue8(d, &obj->r0, 0);

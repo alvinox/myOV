@@ -13,12 +13,13 @@ namespace ir {
 class Design;
 
 class Procedure final : public Scope {
-
  public:
   // static methods
   static Procedure* Create(const std::string& id, Design* m) {
     return new Procedure(id, m);
   }
+
+  static std::string GetSimProtoType(const std::string& p);
 
  public:
   Procedure(const std::string& id, Design* m);
@@ -30,6 +31,7 @@ class Procedure final : public Scope {
   virtual void Print(std::ostream& os) const override;
 
  private:
+  static const char* SimProtoType;
 };
 
 } // end namespace ir
