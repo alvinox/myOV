@@ -13,6 +13,7 @@
 namespace ir {
 
 class Design;
+class Visitor;
 
 class Module final : public Scope {
  public:
@@ -27,6 +28,8 @@ class Module final : public Scope {
   /// Look up the specified design in the module symbol table. If it does not
   /// exist, return null.
   Design* GetDesign(const std::string& id) const;
+
+  virtual void accept(Visitor* visitor) override;
 
  private:
   Context& _context;      ///< The Context from which types and

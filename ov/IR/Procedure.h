@@ -27,8 +27,7 @@ class Procedure final : public Scope {
  public:
   virtual Context& GetContext() const override;
 
-  /// Print the design to an output stream.
-  virtual void Print(std::ostream& os) const override;
+  virtual void accept(Visitor* visitor) override;
 
  private:
   static const char* SimProtoType;

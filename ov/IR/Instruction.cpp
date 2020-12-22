@@ -95,47 +95,84 @@ void Instruction::PrintInstruction(std::ostream& os, unsigned lv) const {
   }
 }
 
-void Instruction::PrintSimulation(std::ostream& os, unsigned lv) const {
+void Instruction::PrintSimulationC(std::ostream& os, unsigned lv) const {
+  std::map<InstID, std::string> FUNC = {
+    {SetValue8InstID , "setvalue8"    },
+    {SetValue16InstID, "setvalue16"   },
+    {GetValue8InstID , "getvalue8"    },
+    {GetValue16InstID, "getvalue16"   },
+  };
+
+  auto GetPool = [&](InstID tid, Value* v) -> std::string {
+    switch (tid) {
+      case SetValue8InstID:
+      case SetValue16InstID: {
+        if (v->GetType()->IsRegisterTy()) {
+          return "d";
+        } else if (v->GetType()->IsWireTy()) {
+          return "wire";
+        }
+        break;
+      }
+
+      case GetValue8InstID:
+      case GetValue16InstID: {
+        if (v->GetType()->IsRegisterTy()) {
+          return "q";
+        } else if (v->GetType()->IsWireTy()) {
+          return "wire";
+        }
+        break;
+      }
+
+      default: assert(0); break;
+    }
+  };
+
   std::string indent = Indent(lv);
-  const std::string& ins = IDtoString(tid);
 
   switch (tid) {
-    case DesignInstID: {
-      Design* d = dynamic_cast<Design*>(operands[0]);
-      os << indent << "struct " << d->GetID() << " {" << std::endl;
-      d->PrintSimulation(os, lv);
-      os << indent << "};";
-      os << std::endl;
+    case SetValue8InstID:
+    case SetValue16InstID: {
+      Value* lhs = operands[0];
+      Value* rhs = operands[1];
+      std::string func = FUNC[tid];
+      std::string pool = GetPool(tid, lhs);
+      os << indent << func << "(" << pool << ", &obj->" << lhs->GetID();
+      os << ", " << rhs->GetID() << ");";
       break;
     }
 
-    case ProcedureInstID: {
-      Procedure* p = dynamic_cast<Procedure*>(operands[0]);
-      Scope* s = p->GetParent();
-      std::string proto = Procedure::GetSimProtoType(s->GetID());
-      os << indent << s->GetID() << "_" << p->GetID() << "(" << proto << ") {" << std::endl;
-      p->PrintSimulation(os, lv);
-      os << indent << "};";
-      os << std::endl;
+    case GetValue8InstID:
+    case GetValue16InstID: {
+      Value* lv = operands[0];
+      assert(lv->GetType()->IsLogicTy());
+      Logic* lhs = static_cast<Logic*>(lv);
+
+      std::string ctype = lhs->GetCType();
+      std::string func  = FUNC[tid];
+      std::string pool  = GetPool(tid, lhs);
+
+      os << indent << ctype << " " << lhs->GetID() << " = ";
+      os << func << "(" << pool << ", &obj->" << lhs->GetID() << ");";
       break;
     }
+    case AssignInstID: {
+      Value* lv = operands[0];
+      assert(lv->GetType()->IsLogicTy());
+      Logic* lhs = static_cast<Logic*>(lv);
+      Value* rhs = operands[1];
 
-    case RegisterInstID: {
-      Register* r = dynamic_cast<Register*>(operands[0]);
-      os << indent << "Variable " << r->GetID() << ";";
-      os << "  // reg bits " << r->GetBits();
-      os << std::endl;
+      std::string ctype = lhs->GetCType();
+      std::string rv_str = rhs->GetID();
+      
+      if (rhs->GetType()->IsExpressionTy()) {
+        rv_str = dynamic_cast<Expr*>(rhs)->GetExpr();
+      }
+      os << indent << ctype << " " << lhs->GetID() << " = " << rv_str << ";";
       break;
     }
-
-    case WireInstID: {
-      Wire* w = dynamic_cast<Wire*>(operands[0]);
-      os << indent << "Variable " << w->GetID() << ";";
-      os << "  // wire bits " << w->GetBits();
-      os << std::endl;
-      break;
-    }
-
+    default: assert(0 && "unsupported instruction"); break;
   }
 }
 

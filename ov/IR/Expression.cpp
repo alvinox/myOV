@@ -17,17 +17,6 @@ BinaryExpr::BinaryExpr(BinaryID tid, Value* lhs, Value* rhs, Scope* s)
   s->AppendLocal(this);
 }
 
-
-// BinaryExpr::~BinaryExpr() {
-//   if (_lhs->GetType()->IsExpressionTy()) {
-//     delete _lhs;
-//   }
-//   if (_rhs->GetType()->IsExpressionTy()) {
-//     delete _rhs;
-//   }
-//   delete this;
-// }
-
 std::string BinaryExpr::GetOperator() const {
   switch (_tid)
   {
@@ -73,20 +62,6 @@ TernaryExpr::TernaryExpr(TernaryID tid, Value* expr1, Value* expr2, Value* expr3
 
   s->AppendLocal(this);
 }
-
-
-// TernaryExpr::~TernaryExpr() {
-//   if (_expr1->GetType()->IsExpressionTy()) {
-//     delete _expr1;
-//   }
-//   if (_expr2->GetType()->IsExpressionTy()) {
-//     delete _expr2;
-//   }
-//   if (_expr3->GetType()->IsExpressionTy()) {
-//     delete _expr3;
-//   }
-//   delete this;
-// }
 
 std::string TernaryExpr::GetOperator() const {
   switch (_tid)

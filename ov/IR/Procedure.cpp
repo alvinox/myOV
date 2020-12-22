@@ -1,4 +1,5 @@
 #include "Procedure.h"
+#include "Visitor.h"
 
 namespace ir {
 
@@ -25,8 +26,8 @@ Context& Procedure::GetContext() const {
   return GetParent()->GetContext();
 }
 
-void Procedure::Print(std::ostream& os) const {
-  os << "    Proc " << GetID() << std::endl;
+void Procedure::accept(Visitor* visitor) {
+  visitor->visit(this);
 }
 
 } // end namespace ir

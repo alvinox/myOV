@@ -63,6 +63,8 @@ class Design final : public Scope {
   /// exist, return null.
   // Memory* GetMemory(const std::string& id);
 
+  virtual void accept(Visitor* visitor) override;
+
  private:
 };
 

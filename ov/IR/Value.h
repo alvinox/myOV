@@ -10,6 +10,7 @@ namespace ir {
 class Type;
 class Scope;
 class Module;
+class Visitor;
 
 class Value {
  public:
@@ -24,7 +25,7 @@ class Value {
   const Type* GetType() const { return _type; }
   void  SetType(const Type* t) { _type = t; }
 
-  virtual void Print(std::ostream& os) const { os << _id; }
+  virtual void accept(Visitor* visitor ) {};// TODO
 
  private:
   std::string _id; // Human readable identifier

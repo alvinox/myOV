@@ -1,4 +1,5 @@
 #include "Module.h"
+#include "Visitor.h"
 
 namespace ir {
 
@@ -15,6 +16,10 @@ Design* Module::GetDesign(const std::string& id) const {
 
   Design* d = dynamic_cast<Design*>(v);
   return d;
+}
+
+void Module::accept(Visitor* visitor) {
+  visitor->visit(this);
 }
 
 } // end namespace ir

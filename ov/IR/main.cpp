@@ -9,6 +9,7 @@
 #include "Logic.h"
 #include "IRBuilder.h"
 #include "Expression.h"
+#include "Visitor.h"
 
 namespace ir {
 
@@ -58,6 +59,10 @@ Value* walk_procedure_main(Value* node) {
   Wire* w0_auto7to0 = Wire::Create("w0_auto7to0", proc, 7, 0);
   builder.CreateAssign(w0_auto7to0, op0);
 
+  Symbol& r0 = proc->Resolve("r0", ok);
+  Logic* r0_logic = static_cast<Logic*>(r0.GetValue());
+  builder.CreateSetValue(r0_logic, w0_auto7to0);
+
   Symbol& w1 = proc->Resolve("w1", ok);
   Logic* w1_logic = static_cast<Logic*>(w1.GetValue());
   builder.CreateGetValue(w1_logic);
@@ -84,9 +89,6 @@ Value* walk_procedure_main(Value* node) {
   Wire* r1_phi = Wire::Create("r1_phi", proc, 0, 0);
   builder.CreateAssign(r1_phi, select);
 
-  Symbol& r0 = proc->Resolve("r0", ok);
-  Logic* r0_logic = static_cast<Logic*>(r0.GetValue());
-  builder.CreateSetValue(r0_logic, w0_auto7to0);
   Symbol& r1 = proc->Resolve("r1", ok);
   Logic* r1_logic = static_cast<Logic*>(r1.GetValue());
   builder.CreateSetValue(r1_logic, r1_phi);
@@ -148,8 +150,8 @@ int main() {
   ir::Value* root_node = ir::walk_module();
   ir::Module* module = dynamic_cast<ir::Module*>(root_node);
 
-  module->PrintInstruction(std::cout); // for degbu
-  module->PrintSimulation(std::cout);
+  module->PrintInstruction(std::cout); // for debug
 
+  ir::VisitorSimC::Pass(module);
   return 0;
 }

@@ -57,9 +57,11 @@ class Type {
   /// Return true if this is an IntegerType of the given width.
   bool IsIntegerTy(unsigned Bitwidth) const;
 
-  bool IsRegisterTyID() const { return GetTypeID() == RegisterTyID; }
+  bool IsRegisterTy() const { return GetTypeID() == RegisterTyID; }
 
-  bool IsWireTyID() const { return GetTypeID() == WireTyID; }
+  bool IsWireTy() const { return GetTypeID() == WireTyID; }
+
+  bool IsLogicTy() const { return IsRegisterTy() || IsWireTy(); }
 
   bool IsModuleTy() const { return GetTypeID() == ModuleTyID; }
 

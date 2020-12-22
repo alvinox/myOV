@@ -44,8 +44,6 @@ class Process final : public Value {
     return new Process(pt, id, d);
   }
 
-  // static members
-
  public:
   // constructor/destructor
   Process(ProcessType *pt, const std::string& id, Design* d);

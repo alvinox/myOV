@@ -1,4 +1,5 @@
 #include "Design.h"
+#include "Visitor.h"
 
 namespace ir {
 
@@ -41,6 +42,10 @@ Wire* Design::GetWire(const std::string& id) const {
 
   Wire* w = dynamic_cast<Wire*>(v);
   return w;
+}
+
+void Design::accept(Visitor* visitor) {
+  visitor->visit(this);
 }
 
 } // end namespace ir

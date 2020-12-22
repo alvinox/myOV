@@ -25,6 +25,8 @@ class Logic : public Value {
 
    unsigned GetBits() const { return _hi - _lo + 1; }
 
+   std::string GetCType() const; ///< get type of C when generate Simulation code
+
    std::string RangeStr() const;
 
  private:
@@ -44,7 +46,7 @@ class Register final : public Logic {
   Register(const std::string& id, Scope* s, unsigned hi = 0, unsigned lo = 0);
  
  public:
-
+  virtual void accept(Visitor* visitor) override;
  private:
 };
 
@@ -57,6 +59,7 @@ class Wire final : public Logic {
   Wire(const std::string& id, Scope* s, unsigned hi = 0, unsigned lo = 0);
 
  public:
+  virtual void accept(Visitor* visitor) override;
 
  private:
 };

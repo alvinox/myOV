@@ -1,2 +1,5 @@
+# compile
+g++ -g Visitor.cpp Expression.cpp Constants.cpp Util.cpp Instruction.cpp IRBuilder.cpp Procedure.cpp Logic.cpp Scope.cpp Design.cpp SymbolTable.cpp Context.cpp Module.cpp main.cpp  -frtti -o toy
 
-g++ -g Constants.cpp Util.cpp Instruction.cpp IRBuilder.cpp Procedure.cpp Logic.cpp Scope.cpp Design.cpp SymbolTable.cpp Context.cpp Module.cpp main.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -frtti -o toy
+# compile with llvm
+g++ -g Visitor.cpp Expression.cpp Constants.cpp Util.cpp Instruction.cpp IRBuilder.cpp Procedure.cpp Logic.cpp Scope.cpp Design.cpp SymbolTable.cpp Context.cpp Module.cpp main.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -frtti -o toy

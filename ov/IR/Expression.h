@@ -39,7 +39,6 @@ class BinaryExpr final : public Expr {
 
  public:
   BinaryExpr(BinaryID tid, Value* lhs, Value* rhs, Scope* s);
-  // virtual ~BinaryExpr();
 
  public:
   virtual std::string GetOperator() const override;
@@ -66,7 +65,6 @@ class TernaryExpr final : public Expr {
 
  public:
   TernaryExpr(TernaryID tid, Value* expr1, Value* expr2, Value* expr3, Scope* s);
-  // virtual ~TernaryExpr();
 
  public:
   virtual std::string GetOperator() const override;

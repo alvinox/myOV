@@ -39,17 +39,9 @@ class SymbolTable {
   const_iterator end()   { return _v.cend(); }
 
  public:
-  // void clear();
-
   Symbol& cbegin() const;
   Symbol& cend()   const;
   
-  void Clear() {
-    for (Symbol& s : _v) {
-      delete s._value;
-    }
-  }
-
   Symbol& Define (Value* value);
   Symbol& Resolve(const std::string& name, bool& ok);
 

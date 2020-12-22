@@ -8,7 +8,29 @@
 
 namespace ir {
 
+class Design;
+class Register;
+class Wire;
+class Procedure;
+
 class Scope : public Value {
+ public:
+  class Collection {
+   // this util class is used for dispatch instructions by Type 
+   public:
+    void Clear();
+    void Collect(const std::vector<Instruction*> ins);
+  
+   public:
+    std::vector<Design*>      designs;       // design    definition
+    std::vector<Register*>    regs;          // register  definition
+    std::vector<Wire*>        wires;         // wire      definition
+    std::vector<Procedure*>   procs;         // procedure definition
+    std::vector<Instruction*> reg_setvalues; // nonblocking assignments
+    std::vector<Instruction*> reg_getvalues; // nonblocking assignments
+    std::vector<Instruction*> statements;    // other statements
+  };
+
  public:
   Scope(const std::string& id, Scope* p)
     : _parent(p), Value(id) {}
@@ -42,7 +64,10 @@ class Scope : public Value {
   }
 
   void PrintInstruction(std::ostream& os, unsigned lv = 0) const;
-  void PrintSimulation(std::ostream& os, unsigned lv = 0) const;
+  void Collect() { collection.Collect(_instructions); }
+
+ public:
+  Collection collection; ///< dispatch instructions
 
  private:
   SymbolTable _symtab;
