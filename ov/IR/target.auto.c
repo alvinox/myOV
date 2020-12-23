@@ -1,5 +1,6 @@
 
-/* test_ip.ov
+//--- test_ip.ov ---//
+/*
 design test_ip {
   reg  logic:8  r0;
   reg  bit      r1;
@@ -26,7 +27,8 @@ design test_ip {
 }
 */
 
-/* test_ip.v
+//--- test_ip.v ---//
+/*
 module test_ip(
   input clk;
   input rst_n;
@@ -51,8 +53,9 @@ module test_ip(
   end
 
 endmodule
-
 */
+
+#include "sim_library.h"
 
 struct test_ip {
   Variable8 r0; // reg bits: 8
@@ -60,7 +63,13 @@ struct test_ip {
 
   Variable16 w0; // wire bits: 14
   Variable8  w1; // wire bits: 5
+};
 
+struct test_ip Object = {
+  {0, 0xFF, 0},
+  {1, 0x40, 7},
+  {0, 0xFFF6, 2},
+  {1, 0xF4, 3},
 };
 
 void test_ip_reset(struct test_ip* obj, char* d, char* q, char* mem, char* wire) {

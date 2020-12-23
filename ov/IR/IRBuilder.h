@@ -8,9 +8,6 @@
 
 namespace ir {
 
-class Scope;
-class Design;
-
 class IRBuilder {
  public:
   IRBuilder() : _scope(nullptr) { }

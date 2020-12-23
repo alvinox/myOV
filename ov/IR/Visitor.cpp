@@ -28,12 +28,10 @@ void VisitorSimC::visit(Module* module) {
   module->Collect();
 
   std::string indent = Indent(lv);
-  ostr << indent << module->GetID() << std::endl;
+  ostr << indent << "#include \"sim_library.h\"" << std::endl;
 
   for (Design* d : module->collection.designs) {
-    IncrIndent();
     d->accept(this);
-    DecrIndent();
   }
 }
 
@@ -62,14 +60,16 @@ void VisitorSimC::visit(Design* design) {
 
 void VisitorSimC::visit(Register*  reg   ) {
   std::string indent = Indent(lv);
-  ostr << indent << "Variable " << reg->GetID() << ";";
+  std::string vtype = reg->GetVariableType();
+  ostr << indent << vtype << " " << reg->GetID() << ";";
   ostr << "  // reg bits " << reg->GetBits();
   ostr << std::endl;
 }
 
 void VisitorSimC::visit(Wire*      wire  ) {
   std::string indent = Indent(lv);
-  ostr << indent << "Variable " << wire->GetID() << ";";
+  std::string vtype = wire->GetVariableType();
+  ostr << indent << vtype << " " << wire->GetID() << ";";
   ostr << "  // wire bits " << wire->GetBits();
   ostr << std::endl;
 }
@@ -87,7 +87,8 @@ void VisitorSimC::visit(Procedure* proc  ) {
   std::string indent = Indent(lv);
   Scope* s = proc->GetParent();
   std::string proto = Procedure::GetSimProtoType(s->GetID());
-  ostr << indent << s->GetID() << "_" << proc->GetID() << "(" << proto << ") {" << std::endl;
+  ostr << indent << "void " << s->GetID() << "_" << proc->GetID();
+  ostr << "(" << proto << ") {" << std::endl;
 
   InstructionShiftin(proc->collection.reg_getvalues);
   InstructionShiftin(proc->collection.statements);

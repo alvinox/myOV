@@ -17,11 +17,11 @@ class Argument {
 
  public:
   
-  Process* getParent() const { return _parent_process; }
-  void     setParent(Process* p) { _parent_process = p; }
+  Process* GetParent() const { return _parent_process; }
+  void     SetParent(Process* p) { _parent_process = p; }
 
   /// For example in "void foo(int a, float b)" a is 0 and b is 1.
-  unsigned getArgNo() const {
+  unsigned GetArgNo() const {
     assert(_parent_process && "can't get number of unparented arg");
     return _arg_no;
   }

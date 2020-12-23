@@ -82,7 +82,7 @@ std::string TernaryExpr::GetExpr() const {
     ostr << _expr1->GetID();
   }
 
-  ostr << " : ";
+  ostr << " ? ";
 
   if (_expr2->GetType()->IsExpressionTy()) {
     ostr << dynamic_cast<Expr*>(_expr2)->GetExpr();
@@ -90,7 +90,7 @@ std::string TernaryExpr::GetExpr() const {
     ostr << _expr2->GetID();
   }
 
-  ostr << " ? ";
+  ostr << " : ";
 
   if (_expr3->GetType()->IsExpressionTy()) {
     ostr << dynamic_cast<Expr*>(_expr3)->GetExpr();

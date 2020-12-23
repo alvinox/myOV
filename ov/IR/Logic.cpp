@@ -5,6 +5,15 @@ namespace ir {
 
 //---------------------  Logic  ------------------------//
 
+std::string Logic::GetVariableType() const {
+  unsigned bits = GetBits();
+  if (bits <= 8) {
+    return "Variable8";
+  } else if (8 < bits && bits <= 16) {
+    return "Variable16";
+  }
+}
+
 std::string Logic::GetCType() const {
   unsigned bits = GetBits();
   if (bits <= 8) {
