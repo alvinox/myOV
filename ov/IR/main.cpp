@@ -1,15 +1,14 @@
 #include <stdio.h>
 #include <memory>
 
-// #include "llvm/ADT/APFloat.h"
-
 #include "Context.h"
 #include "Constants.h"
 #include "Module.h"
 #include "Logic.h"
 #include "IRBuilder.h"
 #include "Expression.h"
-#include "Visitor.h"
+#include "VisitorSimC.h"
+#include "VisitorSimLLVM.h"
 
 namespace ir {
 
@@ -153,5 +152,6 @@ int main() {
   module->PrintInstruction(std::cout); // for debug
 
   ir::VisitorSimC::Pass(module);
+  ir::VisitorSimLLVM::Pass(module);
   return 0;
 }

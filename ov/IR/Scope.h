@@ -72,7 +72,7 @@ class Scope : public Value {
  private:
   SymbolTable _symtab;
   Scope*      _parent; ///< parent scope
-  std::vector<Value*> _locals; ///< local values
+  std::vector<Value*> _locals; ///< local values, only for GC
 
   std::vector<Instruction*> _instructions;
 };

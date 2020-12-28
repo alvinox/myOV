@@ -1,5 +1,10 @@
 # compile
-g++ -g Visitor.cpp Expression.cpp Constants.cpp Util.cpp Instruction.cpp IRBuilder.cpp Procedure.cpp Logic.cpp Scope.cpp Design.cpp SymbolTable.cpp Context.cpp Module.cpp main.cpp  -frtti -o toy
+comment line main.cpp:11  #include "VisitorSimLLVM.h"
+comment line main.cpp:155 ir::VisitorSimLLVM::Pass(module);
+g++ -g Constants.cpp Instruction.cpp Module.cpp Util.cpp Context.cpp IRBuilder.cpp Procedure.cpp Visitor.cpp Design.cpp Logic.cpp Scope.cpp VisitorSimC.cpp Expression.cpp  main.cpp SymbolTable.cpp -frtti -o toy
 
 # compile with llvm
-g++ -g Visitor.cpp Expression.cpp Constants.cpp Util.cpp Instruction.cpp IRBuilder.cpp Procedure.cpp Logic.cpp Scope.cpp Design.cpp SymbolTable.cpp Context.cpp Module.cpp main.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -frtti -o toy
+g++ -g *.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -frtti -o toy
+
+# generate llvm IR
+clang -cc1 -emit-llvm target.auto.c -o trget.auto.ll

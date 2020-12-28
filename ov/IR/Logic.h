@@ -31,7 +31,6 @@ class Logic : public Value {
    std::string RangeStr() const;
 
  private:
-  std::string _id;
   Scope* _parent_scope; ///< parent design/process/procedure for the logic
 
   unsigned _hi;
