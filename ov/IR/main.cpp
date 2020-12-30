@@ -8,7 +8,7 @@
 #include "IRBuilder.h"
 #include "Expression.h"
 #include "VisitorSimC.h"
-#include "VisitorSimLLVM.h"
+// #include "VisitorSimLLVM.h"
 
 namespace ir {
 
@@ -152,6 +152,6 @@ int main() {
   module->PrintInstruction(std::cout); // for debug
 
   ir::VisitorSimC::Pass(module);
-  ir::VisitorSimLLVM::Pass(module);
+  // ir::VisitorSimLLVM::Pass(module);
   return 0;
 }

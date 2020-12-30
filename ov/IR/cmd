@@ -7,4 +7,4 @@ g++ -g Constants.cpp Instruction.cpp Module.cpp Util.cpp Context.cpp IRBuilder.c
 g++ -g *.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -frtti -o toy
 
 # generate llvm IR
-clang -cc1 -emit-llvm target.auto.c -o trget.auto.ll
+clang -cc1 -emit-llvm target.auto.c -o target.auto.ll
